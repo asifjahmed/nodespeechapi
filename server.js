@@ -80,7 +80,7 @@ function processSpeech(speechdata) {
 
 		
 		io.emit('finalspeech', speechBuffer);
-		io.emit('confidence', currentSpeech.confidence), 
+		io.emit('confidence', currentSpeech.confidence);
 		currentSpeech = {};
 
 		console.log('-----');
