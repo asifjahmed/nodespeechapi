@@ -5,9 +5,9 @@ var https = require('https'),
 	io = require('socket.io');
 
 var credentials = {
-	key: fs.readFileSync(__dirname + '/server.key'),
-	cert: fs.readFileSync(__dirname + '/server.crt'),
-	ca: fs.readFileSync(__dirname + '/ca.crt'),
+	key: fs.readFileSync('./ssl/server.key'),
+	cert: fs.readFileSync('./ssl/server.crt'),
+	ca: fs.readFileSync('./ssl/ca.crt'),
 	requestCert: true,
 	rejectUnauthorized: false
 };

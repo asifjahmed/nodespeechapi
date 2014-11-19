@@ -1,4 +1,4 @@
-#Tnodespeechapi
+#nodespeechapi
 
 This is a sample app to explore the Web Speech API. Passing speech results to node via Socket.IO for processing, then results sent back to browser to display text.
 
