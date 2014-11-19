@@ -8,6 +8,8 @@ Usage
 ```
 npm install
 node server.js
+
+browse to https://localhost:8000
 ```
 
 Notes:
