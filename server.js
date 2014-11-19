@@ -1,7 +1,6 @@
 
 var https = require('https'),
 	fs = require('fs'),
-	express = require('express'),
 	io = require('socket.io');
 
 var credentials = {
@@ -11,8 +10,6 @@ var credentials = {
 	requestCert: true,
 	rejectUnauthorized: false
 };
-
-var server = express();
 
 var currentSpeech = {};
 var speechBuffer = [];

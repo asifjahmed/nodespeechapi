@@ -6,7 +6,6 @@
   "main": "server.js",
   "author": "Jamie Ahmed",
   "dependencies": {
-    "express": "^4.3.2",
     "socket.io": "^1.2.0"
   },
   "devDependencies": {
