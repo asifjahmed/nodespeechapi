@@ -1,0 +1,15 @@
+{
+  "name": "nodespeechapi",
+  "version": "0.0.1",
+  "description": "Exmaple of Web Speech API with node to provide speech processing",
+  "repository": "https://github.com/asifjahmed/nodespeechapi",
+  "main": "server.js",
+  "author": "Jamie Ahmed",
+  "dependencies": {
+    "express": "^4.3.2",
+    "socket.io": "^1.2.0"
+  },
+  "devDependencies": {
+
+  }
+}

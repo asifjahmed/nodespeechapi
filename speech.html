@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+   <head lang="en-US">
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Web Speech API</title>
+      <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+      <style>
+         body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 20px;
+         }
+         #confidence {
+            color:#00a256;
+         }
+         #finalspeech {
+            color:#045ced;
+         }
+         #unfinalspeech {
+            font-style: italic;
+            color:#ffba00;
+         }
+      </style>
+   </head>
+   <body>
+      <h6 id="confidence">confidence: <span id="confidencetext">--</span></h6>
+      <h1 id="speech"><span id="finalspeech">&nbsp;</span><span id="unfinalspeech">&nbsp;</span></h1>
+
+      <script src="socket.io/socket.io.js"></script>
+      <script>
+         var socket = io('https://localhost:8000', { secure: true });
+         var finalspeech = document.getElementById('finalspeech');
+         var unfinalspeech = document.getElementById('unfinalspeech');
+         var confidencetext = document.getElementById('confidencetext');
+
+         // Test browser support
+         window.SpeechRecognition = window.SpeechRecognition        ||
+                                    window.webkitSpeechRecognition  ||
+                                    null;
+         if (window.SpeechRecognition !== null) {
+
+            var recognizer = new window.SpeechRecognition();
+
+            // Recogniser doesn't stop listening even if the user pauses
+            recognizer.continuous = false;
+            // Give us interim results
+            recognizer.interimResults = true;
+
+            // Start recognising
+            recognizer.onend = function(event) {
+               console.log('recognizer ended, restarting');
+               recognizer.start();
+            };
+
+            recognizer.onstart = function(event) {
+               console.log('recognizer started');
+            };
+
+            recognizer.onsoundstart = function(event) {
+               console.log('!');
+            };
+
+            recognizer.onsoundend = function(event) {
+               console.log('..');
+               //recognizer.stop();
+            };
+
+            recognizer.onresult = function(event) {
+               socket.emit('speech', event.results);
+               // console.log(event.results);
+
+               // this is to catch a chrome bug
+               if(event.results.length === 2 && event.results[0].isFinal) {
+                  location.reload();
+               }
+            };
+
+            // Listen for errors
+            recognizer.onerror = function(event) {
+               console.log('Error: ', event.error);
+            };
+            // start the speech recognition
+            try{
+               recognizer.start();
+            } catch(ex) {
+               console.log('error starting recognizer: ', ex);
+            }
+
+            socket.on('finalspeech', function(speechBuffer) {
+               console.log('final: ', speechBuffer);
+               var concatSpeech = '';
+               speechBuffer.map(function(speech) {
+                  concatSpeech += speech.transcript + ' ';
+               });
+               finalspeech.innerHTML = concatSpeech;
+               unfinalspeech.innerHTML = '';
+            });
+
+            socket.on('unfinalspeech', function(currentSpeech) {
+               console.log('unfinal: ', currentSpeech);
+               unfinalspeech.innerHTML = currentSpeech.transcript;
+            });
+            socket.on('confidence', function(currentConfidence) {
+               confidencetext.innerHTML = currentConfidence;
+            });
+
+         }
+      </script>
+   </body>
+</html>
