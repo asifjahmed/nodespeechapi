@@ -40,10 +40,10 @@ function getwordsbeforeword(splittext, keyword) {
 }
 
 function processSpeech(speechdata) {
-
-	currentSpeech.confidence = parseFloat(speechdata[0][0].confidence).toFixed(3);
-	currentSpeech.transcript = speechdata[0][0].transcript;
-	currentSpeech.isFinal = speechdata[0].isFinal;
+	console.log("data: ", speechdata);
+	currentSpeech.confidence = speechdata.confidence; //parseFloat(speechdata[0][0].confidence).toFixed(3);
+	currentSpeech.transcript = speechdata.transcript; //speechdata[0][0].transcript;
+	currentSpeech.isFinal = speechdata.isFinal; //speechdata[0].isFinal;
 	currentSpeech.time = Date.now();
 
 	if(currentSpeech.transcript.indexOf('\n\n') >= 0) {
@@ -78,7 +78,7 @@ function processSpeech(speechdata) {
 			speechBuffer.push(currentSpeech);
 		}
 
-		
+
 		io.emit('finalspeech', speechBuffer);
 		io.emit('confidence', currentSpeech.confidence);
 		currentSpeech = {};
